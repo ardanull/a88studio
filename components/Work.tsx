@@ -4,54 +4,10 @@ import { motion } from 'framer-motion'
 import { ExternalLink, ArrowUpRight } from 'lucide-react'
 import { useLanguage } from '@/components/LanguageContext'
 import { useParallax, useMouseParallax } from '@/hooks/useParallax'
+import Link from 'next/link'
+import { projects } from '@/lib/work'
 
-const projects = [
-  {
-    title: 'TechVision Platform',
-    category: 'E-commerce',
-    description: {
-      en: 'Complete redesign and development of an enterprise e-commerce platform',
-      tr: 'Kurumsal e-ticaret platformunun tam yeniden tasarımı ve geliştirilmesi',
-    },
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&h=800&fit=crop&q=80',
-    tags: ['Next.js', 'TypeScript', 'Stripe'],
-    metrics: [
-      { label: { en: 'Revenue increase', tr: 'Gelir artışı' }, value: '+250%' },
-      { label: { en: 'Load time', tr: 'Yükleme süresi' }, value: '0.8s' },
-    ],
-    color: 'from-blue-500/20 to-purple-500/20',
-  },
-  {
-    title: 'BeautyBox',
-    category: 'Mobile App',
-    description: {
-      en: 'iOS and Android app for beauty service bookings',
-      tr: 'Güzellik hizmeti rezervasyonları için iOS ve Android uygulaması',
-    },
-    image: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=1200&h=800&fit=crop&q=80',
-    tags: ['React Native', 'Node.js', 'MongoDB'],
-    metrics: [
-      { label: { en: 'Downloads', tr: 'İndirme' }, value: '50K+' },
-      { label: { en: 'Rating', tr: 'Puan' }, value: '4.8/5' },
-    ],
-    color: 'from-pink-500/20 to-rose-500/20',
-  },
-  {
-    title: 'EduPlatform',
-    category: 'Web Application',
-    description: {
-      en: 'Learning management system for online education',
-      tr: 'Online eğitim için öğrenme yönetim sistemi',
-    },
-    image: 'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?w=1200&h=800&fit=crop&q=80',
-    tags: ['React', 'GraphQL', 'AWS'],
-    metrics: [
-      { label: { en: 'Active users', tr: 'Aktif kullanıcı' }, value: '10K+' },
-      { label: { en: 'Uptime', tr: 'Çalışma süresi' }, value: '99.9%' },
-    ],
-    color: 'from-green-500/20 to-emerald-500/20',
-  },
-]
+// using projects from lib/work
 
 // Parallax Background Component
 function ParallaxBackground() {
@@ -162,13 +118,13 @@ export default function Work() {
                     ))}
                   </div>
 
-                  <button
-                    type="button"
+                  <Link
+                    href={`/work/${project.slug}`}
                     className="group/btn inline-flex w-fit items-center gap-2 text-sm font-semibold text-foreground transition-colors hover:text-primary"
                   >
                     {isTR ? 'Vaka çalışmasını gör' : 'View case study'}
                     <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5" />
-                  </button>
+                  </Link>
                 </div>
 
                 <div
@@ -180,11 +136,13 @@ export default function Work() {
                     <div
                       className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-0 transition-opacity duration-500 group-hover/img:opacity-100`}
                     />
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover/img:scale-105"
-                    />
+                    <Link href={`/work/${project.slug}`}>
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover/img:scale-105"
+                      />
+                    </Link>
                     <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover/img:opacity-100">
                       <div className="rounded-full bg-background/90 p-4 backdrop-blur-sm">
                         <ExternalLink className="h-6 w-6" />

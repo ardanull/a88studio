@@ -30,7 +30,7 @@ export default function Preloader() {
       <div className="flex flex-col items-center gap-4">
         <div className="h-10 w-10 rounded-full border-2 border-border border-t-primary animate-spin" />
         <div className="text-xs font-semibold uppercase tracking-[0.25em] text-muted-foreground">
-          a88studio
+          a88digital. ®
         </div>
       </div>
     </div>

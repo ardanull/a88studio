@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { readJson, writeJson } from '@/lib/store'
 
 export async function POST(request: NextRequest) {
   try {
@@ -39,8 +40,17 @@ export async function POST(request: NextRequest) {
     //   `,
     // })
 
-    // For now, just log it
-    console.log('Contact form submission:', { name, email, company, budget, message })
+    const submissions = readJson<any[]>('submissions.json', [])
+    submissions.push({
+      type: 'contact',
+      name,
+      email,
+      company,
+      budget,
+      message,
+      createdAt: new Date().toISOString(),
+    })
+    writeJson('submissions.json', submissions)
 
     // Simulate success
     return NextResponse.json(

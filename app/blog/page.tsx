@@ -1,119 +1,197 @@
 'use client'
-
-import { motion } from 'framer-motion'
-import Navigation from '@/components/Navigation'
-import Footer from '@/components/Footer'
-import ScrollProgress from '@/components/ScrollProgress'
-import { Calendar, Clock, ArrowUpRight } from 'lucide-react'
-import { useLanguage } from '@/components/LanguageContext'
-import { getAllBlogPosts } from '@/lib/blog'
-import Link from 'next/link'
-
-export default function BlogPage() {
-  const { language } = useLanguage()
-  const isTR = language === 'tr'
-  const posts = getAllBlogPosts()
-
-  return (
-    <>
-      <ScrollProgress />
-      <Navigation />
-      <main>
-        <section className="section-padding">
-          <div className="container-custom">
-            <motion.header
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: 'easeOut' }}
-              className="mb-16 md:mb-24"
-            >
-              <p className="text-xs font-semibold uppercase tracking-[0.25em] text-muted-foreground">
-                Blog
-              </p>
-              <h1 className="mt-4 text-4xl font-bold tracking-tight md:text-6xl">
-                {isTR ? 'Stüdyodan içgörüler ve hikayeler' : 'Insights & stories from the studio'}
-              </h1>
-              <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
-                {isTR
-                  ? 'Her boyuttaki ekiple tasarım, geliştirme ve dijital ürün geliştirme üzerine düşünceler.'
-                  : 'Thoughts on design, development, and building digital products with teams of all sizes.'}
-              </p>
-            </motion.header>
-
-            <div className="grid gap-8 md:grid-cols-2">
-              {posts.map((post, index) => (
-                <motion.article
-                  key={post.slug}
-                  initial={{ opacity: 0, y: 40 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 0.7, ease: 'easeOut', delay: index * 0.1 }}
-                  className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-background shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-                >
-                  <Link href={`/blog/${post.slug}`} className="relative aspect-[16/10] overflow-hidden bg-muted">
-                    <img
-                      src={post.image}
-                      alt={post.title[language]}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                  </Link>
-
-                  <div className="flex flex-1 flex-col p-6">
-                    <div className="mb-4 flex items-center justify-between text-xs text-muted-foreground">
-                      <span className="rounded-full border border-border px-3 py-1 text-[11px] font-medium">
-                        {post.tag[language]}
-                      </span>
-                      <div className="flex items-center gap-3">
-                        <span className="flex items-center gap-1">
-                          <Calendar className="h-3 w-3" />
-                          {post.date}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
-                          {post.readingTime[language]}
-                        </span>
-                      </div>
-                    </div>
-
-                    <Link href={`/blog/${post.slug}`}>
-                      <h2 className="mb-3 text-xl font-bold tracking-tight transition-colors hover:text-primary">
-                        {post.title[language]}
-                      </h2>
-                    </Link>
-
-                    <p className="mb-6 flex-grow text-sm text-muted-foreground">
-                      {post.excerpt[language]}
-                    </p>
-
-                    <Link
-                      href={`/blog/${post.slug}`}
-                      className="inline-flex w-fit items-center gap-2 text-sm font-medium text-foreground transition-colors hover:text-primary"
-                    >
-                      {isTR ? 'Hikayeyi oku' : 'Read story'}
-                      <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                    </Link>
-                  </div>
-                </motion.article>
-              ))}
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.7, ease: 'easeOut' }}
-              className="mt-16 text-center"
-            >
-              <p className="text-muted-foreground">
-                {isTR ? 'Daha fazla yazı çok yakında...' : 'More articles coming soon...'}
-              </p>
-            </motion.div>
-          </div>
-        </section>
-      </main>
-      <Footer />
-    </>
+ 
+ import Navigation from '@/components/Navigation'
+ import Footer from '@/components/Footer'
+ import ScrollProgress from '@/components/ScrollProgress'
+ import { useLanguage } from '@/components/LanguageContext'
+ import { useEffect, useMemo, useState } from 'react'
+ import Link from 'next/link'
+ 
+ export default function BlogIndexPage() {
+   const { language } = useLanguage()
+   const isTR = language === 'tr'
+ 
+  const [allPosts, setAllPosts] = useState<any[]>([])
+  useEffect(() => {
+    fetch('/api/blog')
+      .then((r) => r.json())
+      .then((d) => setAllPosts(d))
+      .catch(() => setAllPosts([]))
+  }, [])
+  const visible = useMemo(
+    () => allPosts.filter((p) => !p.status || p.status === 'published'),
+    [allPosts]
   )
-}
-
+  const tags = useMemo(() => {
+    const raw = visible.flatMap((p) => (Array.isArray(p.tags?.[language]) ? p.tags[language] : p.tag?.[language] ? [p.tag[language]] : []))
+    return Array.from(new Set(raw.filter(Boolean)))
+  }, [visible, language])
+  const categories = useMemo(() => {
+    const raw = visible.flatMap((p) => (Array.isArray(p.categories?.[language]) ? p.categories[language] : []))
+    return Array.from(new Set(raw.filter(Boolean)))
+  }, [visible, language])
+ 
+   const [query, setQuery] = useState('')
+  const [activeTag, setActiveTag] = useState<string | null>(null)
+  const [activeCategory, setActiveCategory] = useState<string | null>(null)
+   const [page, setPage] = useState(1)
+   const pageSize = 6
+ 
+  const filtered = visible.filter((p) => {
+     const q = query.trim().toLowerCase()
+     const matchesQuery =
+       !q ||
+       p.title[language].toLowerCase().includes(q) ||
+       p.excerpt[language].toLowerCase().includes(q)
+    const postTags = Array.isArray(p.tags?.[language]) ? p.tags[language] : p.tag?.[language] ? [p.tag[language]] : []
+    const postCategories = Array.isArray(p.categories?.[language]) ? p.categories[language] : []
+    const matchesTag = !activeTag || postTags.includes(activeTag)
+    const matchesCategory = !activeCategory || postCategories.includes(activeCategory)
+    return matchesQuery && matchesTag && matchesCategory
+   })
+ 
+   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize))
+   const start = (page - 1) * pageSize
+   const pageItems = filtered.slice(start, start + pageSize)
+ 
+  const changeTag = (t: string | null) => {
+    setActiveTag(t)
+    setPage(1)
+  }
+  const changeCategory = (c: string | null) => {
+    setActiveCategory(c)
+    setPage(1)
+  }
+ 
+   return (
+     <>
+       <ScrollProgress />
+       <Navigation />
+       <main>
+         <section className="section-padding">
+           <div className="container-custom">
+             <header className="mb-10 md:mb-16">
+               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-muted-foreground">
+                 {isTR ? 'Blog' : 'Blog'}
+               </p>
+               <h1 className="mt-4 text-4xl font-bold tracking-tight md:text-6xl">
+                 {isTR ? 'Yazılar ve içgörüler' : 'Articles and insights'}
+               </h1>
+               <p className="mt-4 max-w-2xl text-lg text-muted-foreground">
+                 {isTR
+                   ? 'Tasarım, süreç ve modern web geliştirme üzerine notlar.'
+                   : 'Notes on design, process, and modern web development.'}
+               </p>
+             </header>
+ 
+            <div className="mb-6 flex flex-wrap items-center gap-3">
+               <input
+                 value={query}
+                 onChange={(e) => setQuery(e.target.value)}
+                 placeholder={isTR ? 'Ara...' : 'Search...'}
+                 className="w-full rounded-full border border-border bg-background px-4 py-2 text-sm md:w-64"
+               />
+              <div className="flex flex-wrap gap-2">
+                 <button
+                   onClick={() => changeTag(null)}
+                   className={`rounded-full px-3 py-1 text-sm ${
+                     activeTag === null ? 'bg-primary/10 text-primary' : 'border border-border bg-background'
+                   }`}
+                 >
+                   {isTR ? 'Tümü' : 'All'}
+                 </button>
+                 {tags.map((t) => (
+                   <button
+                     key={t}
+                     onClick={() => changeTag(t)}
+                     className={`rounded-full px-3 py-1 text-sm ${
+                       activeTag === t ? 'bg-primary/10 text-primary' : 'border border-border bg-background'
+                     }`}
+                   >
+                     {t}
+                   </button>
+                 ))}
+               </div>
+              {categories.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={() => changeCategory(null)}
+                    className={`rounded-full px-3 py-1 text-sm ${
+                      activeCategory === null ? 'bg-primary/10 text-primary' : 'border border-border bg-background'
+                    }`}
+                  >
+                    {isTR ? 'Tüm kategoriler' : 'All categories'}
+                  </button>
+                  {categories.map((c) => (
+                    <button
+                      key={c}
+                      onClick={() => changeCategory(c)}
+                      className={`rounded-full px-3 py-1 text-sm ${
+                        activeCategory === c ? 'bg-primary/10 text-primary' : 'border border-border bg-background'
+                      }`}
+                    >
+                      {c}
+                    </button>
+                  ))}
+                </div>
+              )}
+             </div>
+ 
+             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {pageItems.map((post) => {
+                const tagLabel = Array.isArray(post.tags?.[language])
+                  ? post.tags[language][0]
+                  : post.tag?.[language]
+                return (
+                 <Link
+                   key={post.slug}
+                   href={`/blog/${post.slug}`}
+                   className="group rounded-2xl border border-border"
+                 >
+                   <img
+                     src={post.image}
+                     alt={post.title[language]}
+                     className="aspect-[4/3] w-full rounded-t-2xl object-cover"
+                   />
+                   <div className="p-4">
+                    <div className="flex items-center justify-between">
+                      {tagLabel && (
+                        <span className="text-xs rounded-full border border-border px-3 py-1 text-muted-foreground">
+                          {tagLabel}
+                        </span>
+                      )}
+                       <span className="text-xs text-muted-foreground">{post.readingTime[language]}</span>
+                     </div>
+                     <h3 className="mt-3 text-lg font-semibold">{post.title[language]}</h3>
+                     <p className="mt-2 text-sm text-muted-foreground">{post.excerpt[language]}</p>
+                   </div>
+                </Link>
+              )})}
+             </div>
+ 
+             <div className="mt-8 flex items-center justify-center gap-2">
+               <button
+                 disabled={page <= 1}
+                 onClick={() => setPage((p) => Math.max(1, p - 1))}
+                 className="rounded-full border border-border bg-background px-3 py-1 text-sm disabled:opacity-60"
+               >
+                 {isTR ? 'Önceki' : 'Prev'}
+               </button>
+               <span className="text-sm text-muted-foreground">
+                 {page} / {totalPages}
+               </span>
+               <button
+                 disabled={page >= totalPages}
+                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                 className="rounded-full border border-border bg-background px-3 py-1 text-sm disabled:opacity-60"
+               >
+                 {isTR ? 'Sonraki' : 'Next'}
+               </button>
+             </div>
+           </div>
+         </section>
+       </main>
+       <Footer />
+     </>
+   )
+ }

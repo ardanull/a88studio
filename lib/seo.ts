@@ -8,6 +8,7 @@ interface SEOProps {
   type?: 'website' | 'article'
   publishedTime?: string
   author?: string
+  locale?: 'en' | 'tr'
 }
 
 const siteConfig = {
@@ -17,6 +18,7 @@ const siteConfig = {
   ogImage: 'https://a88studio.com/og-image.jpg',
   twitter: '@a88studio',
   instagram: '@a88studio',
+  locales: ['en', 'tr'] as const,
 }
 
 export function generateSEO({
@@ -27,6 +29,7 @@ export function generateSEO({
   type = 'website',
   publishedTime,
   author,
+  locale = 'en',
 }: SEOProps): Metadata {
   const url = `${siteConfig.url}${path}`
   const ogImage = image || siteConfig.ogImage
@@ -51,6 +54,10 @@ export function generateSEO({
     publisher: siteConfig.name,
     alternates: {
       canonical: url,
+      languages: {
+        'en-US': `${siteConfig.url}${path}`,
+        'tr-TR': `${siteConfig.url}${path}`,
+      },
     },
     openGraph: {
       type,

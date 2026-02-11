@@ -6,8 +6,8 @@ import { useLanguage } from '@/components/LanguageContext'
 
 const team = [
   {
-    name: 'Alex Morgan',
-    role: { en: 'Creative Director', tr: 'Kreatif Direktör' },
+    name: 'Arda Yaşdiken',
+    role: { en: 'Product Leader', tr: 'Proje Sahibi' },
     image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
     bio: {
       en: 'Leading brand strategy and visual direction for 10+ years.',
@@ -15,7 +15,7 @@ const team = [
     },
     social: {
       twitter: '#',
-      linkedin: '#',
+      linkedin: 'https://www.linkedin.com/in/arda-ya%C5%9Fdiken-b7097b360/',
     },
   },
   {

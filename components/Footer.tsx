@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div>
-            <div className="text-xl font-semibold">a88studio</div>
+            <div className="text-xl font-semibold">a88digital. ®</div>
             <p className="mt-4 text-sm text-muted-foreground">
               A design and development studio creating exceptional digital products.
             </p>
@@ -37,20 +37,20 @@ export default function Footer() {
           <div>
             <div className="text-sm font-medium mb-4">Legal</div>
             <ul className="space-y-3 text-sm text-muted-foreground">
-              <li><a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Terms of Service</a></li>
-              <li><a href="#" className="hover:text-foreground transition-colors">Cookie Policy</a></li>
+              <li><a href="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</a></li>
+              <li><a href="/terms" className="hover:text-foreground transition-colors">Terms of Service</a></li>
+              <li><a href="/cookie" className="hover:text-foreground transition-colors">Cookie Policy</a></li>
             </ul>
           </div>
         </div>
 
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-8 text-sm text-muted-foreground md:flex-row">
-          <div>© 2024 a88studio. All rights reserved.</div>
+          <div>© {new Date().getFullYear()} a88digital. All rights reserved.</div>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-foreground transition-colors">Twitter</a>
-            <a href="#" className="hover:text-foreground transition-colors">Instagram</a>
-            <a href="#" className="hover:text-foreground transition-colors">LinkedIn</a>
-            <a href="#" className="hover:text-foreground transition-colors">Dribbble</a>
+            <a href="https://twitter.com/a88digital" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">Twitter</a>
+            <a href="https://instagram.com/a88digital" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">Instagram</a>
+            <a href="https://linkedin.com/company/a88digital" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">LinkedIn</a>
+            <a href="https://dribbble.com/a88digital" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">Dribbble</a>
           </div>
         </div>
       </div>

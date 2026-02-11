@@ -54,8 +54,8 @@ export default function Navigation() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 text-sm font-medium tracking-[0.22em] uppercase">
             <span className="text-xs text-muted-foreground">
-              a88studio
-              <span className="ml-2 text-[10px] text-muted-foreground/70">Digital Studio</span>
+              a88digital.
+              <span className="ml-2 text-[10px] text-muted-foreground/70">Studio</span>
             </span>
           </Link>
 
@@ -78,6 +78,12 @@ export default function Navigation() {
               >
                 {language === 'tr' ? 'Blog' : 'Blog'}
               </Link>
+              <Link
+                href="/careers"
+                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              >
+                {language === 'tr' ? 'Kariyerler' : 'Careers'}
+              </Link>
             </div>
 
             {/* Language toggle */}
@@ -97,7 +103,7 @@ export default function Navigation() {
           <button
             type="button"
             aria-label="Toggle navigation"
-            aria-expanded={isMenuOpen}
+            aria-expanded={isMenuOpen ? 'true' : 'false'}
             onClick={() => setIsMenuOpen((open) => !open)}
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-background text-xs text-muted-foreground md:hidden"
           >
@@ -144,6 +150,13 @@ export default function Navigation() {
                 >
                   {language === 'tr' ? 'Blog' : 'Blog'}
                 </Link>
+                <Link
+                  href="/careers"
+                  onClick={handleNavClick}
+                  className="rounded-full px-3 py-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                >
+                  {language === 'tr' ? 'Kariyerler' : 'Careers'}
+                </Link>
                 {/* mobile dil seçici de sol sabit buton ile yönetiliyor */}
                 <Link
                   href="#contact"
@@ -161,4 +174,3 @@ export default function Navigation() {
     </nav>
   )
 }
-

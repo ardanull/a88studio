@@ -114,32 +114,28 @@ export default function Contact() {
               <div>
                 <div className="text-sm font-medium text-muted-foreground">Email</div>
                 <a href="mailto:hello@a88studio.com" className="mt-1 text-lg hover:underline">
-                  hello@a88studio.com
+                  hello@a88digital.com
                 </a>
               </div>
               <div>
                 <div className="text-sm font-medium text-muted-foreground">Phone</div>
-                <a href="tel:+905551234567" className="mt-1 text-lg hover:underline">
-                  +90 555 123 45 67
+                <a className="mt-1 text-lg hover:underline">
+                  +90 541 554 61 91
+                  +44 280 740 88 88
                 </a>
               </div>
               <div>
                 <div className="text-sm font-medium text-muted-foreground">Location</div>
-                <div className="mt-1 text-lg">İzmir, Turkey</div>
+                <div className="mt-1 text-lg">London, UK</div>
               </div>
             </div>
 
             {/* Social Links */}
             <div className="mt-12 flex gap-4">
-              {['Twitter', 'Instagram', 'LinkedIn', 'Dribbble'].map((social) => (
-                <a
-                  key={social}
-                  href={`#${social.toLowerCase()}`}
-                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  {social}
-                </a>
-              ))}
+              <a href="https://twitter.com/a88digital" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground transition-colors hover:text-foreground">Twitter</a>
+              <a href="https://instagram.com/a88digital" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground transition-colors hover:text-foreground">Instagram</a>
+              <a href="https://linkedin.com/company/a88digital" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground transition-colors hover:text-foreground">LinkedIn</a>
+              <a href="https://dribbble.com/a88digital" target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground transition-colors hover:text-foreground">Dribbble</a>
             </div>
           </motion.div>
 
